@@ -1,12 +1,15 @@
 const canvas = document.querySelector('#space');
 const ctx = canvas.getContext("2d");
+const SCALE = 150; //pixels per AU
+const dt = 1 / 365; //years per frame (1 day)
+const cx = canvas.width / 2, cy = canvas.height / 2;
 
-const G = 1; //gravitational constant
-const sun = {x: 300, y: 300, mass: 20000};
+const G = 4 * Math.PI ** 2; //gravitational constant
+const sun = {x: 0, y: 0, mass: 1};
 const planet = {
-    x: 450, y: 300, //start pos
-    vx: 0, vy: 11.5, 
-    mass: 5
+    x: 1, y: 0, //start pos
+    vx: 0, vy: 2 * Math.PI, 
+    mass: 3.003e-6
 }
 
 function drawCircle(x, y, radius, color){
@@ -27,16 +30,16 @@ function update() {
     const ax = (force * dx) / distance /planet.mass;
     const ay = (force * dy) / distance /planet.mass;
 
-    planet.vx += ax;
-    planet.vy += ay;
-    planet.x += planet.vx;
-    planet.y += planet.vy;
+    planet.vx += ax * dt;
+    planet.vy += ay * dt;
+    planet.x += planet.vx * dt;
+    planet.y += planet.vy * dt;
 }
 
 function render() {
-    ctx.clearRect(0, 0, canvas.clientWidth, canvas.height);
-    drawCircle(sun.x, sun.y, 20, "yellow");
-    drawCircle(planet.x, planet.y, 8, "blue");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawCircle(cx + sun.x * SCALE, cy + sun.y * SCALE, 20, "yellow");
+    drawCircle(cx + planet.x * SCALE, cy + planet.y * SCALE, 8, "blue");
 }
 
 function loop(){
@@ -46,6 +49,3 @@ function loop(){
 }
 
 loop();
-
-drawCircle(300,300,20,"yellow"); //star
-drawCircle(450,300,8,"blue"); //planet
