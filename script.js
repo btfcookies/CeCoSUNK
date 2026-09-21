@@ -1,5 +1,6 @@
 const canvas = document.querySelector('#space');
 const ctx = canvas.getContext("2d");
+const logDisplay = document.querySelector('#log');
 
 const G = 1; //gravitational constant
 
@@ -33,6 +34,12 @@ function initializeOrbits(star, planet) {
 
 for (const b of bodies.slice(1)) initializeOrbits(bodies[0], b);
 
+function logValues(){
+    for (let i = 0; i<bodies.length; i++){
+      log = "\nBody: " + i + ", x: " + bodies[i].x + ", y: " + bodies[i].y + ", vx: " + bodies[i].vx + ", vy: " + bodies[i].vy;
+      logDisplay.append(log);  
+    }
+}
 
 function update() {
     for (let i = 0; i<bodies.length; i++){
@@ -55,6 +62,7 @@ function update() {
         b.x += b.vx;
         b.y += b.vy;
     }
+
 }
 
 function render() {
@@ -66,6 +74,7 @@ function render() {
 function loop(){
     update();
     render();
+    logValues();
     requestAnimationFrame(loop);
 }
 
