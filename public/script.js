@@ -11,12 +11,12 @@ const bodies = [
     { x: 300, y: 480, vx: -2.6, vy: 0,    mass: 4,     radius: 5,  color: "green" },   // planet 3
 ]
 
-window.onload = function(){
-    for (i=0; i<bodies.length; i++){
-        document.createElement('div');
-        logDisplay.append('div');
-    }
-}
+const velocityDisplays = bodies.map((_, i) => {
+    const div = document.createElement('div');
+    div.classList.add('velocityDisplay' + i);
+    logDisplay.append(div);
+    return div;
+});
 
 function drawCircle(x, y, radius, color){
     ctx.beginPath();
@@ -41,8 +41,10 @@ function initializeOrbits(star, planet) {
 
 for (const b of bodies.slice(1)) initializeOrbits(bodies[0], b);
 
-function logValues(){
-    
+function displayVelocity() {
+    for (let i=0; i<bodies.length; i++){
+        velocityDisplays[i].textContent = "vx: " + bodies[i].vx + " | vy: " + bodies[i].vy;
+    }
 }
 
 function update() {
@@ -78,7 +80,7 @@ function render() {
 function loop(){
     update();
     render();
-    logValues();
+    displayVelocity();
     requestAnimationFrame(loop);
 }
 
