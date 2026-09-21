@@ -1,0 +1,25 @@
+{
+  "name": "CeCoSUNK",
+  "version": "1.1.0",
+  "description": "Celestial Collision Simulator Utilizing Newtonian Kinematics (CeCoSunk) is a browser based simulator for the movement of celestial bodies.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cd public && live-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/btfcookies/CeCoSunk.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/btfcookies/CeCoSunk/issues"
+  },
+  "homepage": "https://github.com/btfcookies/CeCoSunk#readme",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
