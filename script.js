@@ -1,16 +1,14 @@
 const canvas = document.querySelector('#space');
 const ctx = canvas.getContext("2d");
-const SCALE = 150; //pixels per AU
-const dt = 1 / 365; //years per frame (1 day)
-const cx = canvas.width / 2, cy = canvas.height / 2;
 
-const G = 4 * Math.PI ** 2; //gravitational constant
-const sun = {x: 0, y: 0, mass: 1};
-const planet = {
-    x: 1, y: 0, //start pos
-    vx: 0, vy: 2 * Math.PI, 
-    mass: 3.003e-6
-}
+const G = 1; //gravitational constant
+
+const bodies = [
+    { x: 300, y: 300, vx: 0,    vy: 0,    mass: 40000, radius: 20, color: "yellow" },      // star
+    { x: 450, y: 300, vx: 0,    vy: 2.4,  mass: 5,     radius: 6,  color: "blue" },  // planet 1
+    { x: 200, y: 300, vx: 0,    vy: -3.2, mass: 3,     radius: 4,  color: "red" },   // planet 2
+    { x: 300, y: 480, vx: -2.6, vy: 0,    mass: 4,     radius: 5,  color: "green" },   // planet 3
+]
 
 function drawCircle(x, y, radius, color){
     ctx.beginPath();
@@ -20,26 +18,31 @@ function drawCircle(x, y, radius, color){
 }
 
 function update() {
-    const dx = sun.x - planet.x;
-    const dy = sun.y - planet.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
+    for (let i = 0; i<bodies.length; i++){
+        let ax = 0, ay = 0;
+        for (let j = 0; j < bodies.length; j++){
+            if (i===j) continue;
+            const dx = bodies[j].x - bodies[i].x;
+            const dy = bodies[j].y - bodies[i].y;
+            const distance = Math.sqrt(dx ** 2 + dy ** 2) || 1; //never divide by 0
+            const force = (G * bodies[i].mass * bodies[j].mass) / (distance ** 2 ); //Newton's Law of Universal Gravitation
+            ax += (force * dx) / distance / bodies[i].mass;
+            ay += (force * dy) / distance / bodies[i].mass;
+        }
+        bodies[i].vx += ax;
+        bodies[i].vy += ay;
+    }
 
-    const force = (G * sun.mass * planet.mass) / (distance*distance); //Newton's Law of Universal Gravitation
-
-    // force to acceleration
-    const ax = (force * dx) / distance /planet.mass;
-    const ay = (force * dy) / distance /planet.mass;
-
-    planet.vx += ax * dt;
-    planet.vy += ay * dt;
-    planet.x += planet.vx * dt;
-    planet.y += planet.vy * dt;
+    for (const b of bodies){
+        b.x += b.vx;
+        b.y += b.vy;
+    }
 }
 
 function render() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawCircle(cx + sun.x * SCALE, cy + sun.y * SCALE, 20, "yellow");
-    drawCircle(cx + planet.x * SCALE, cy + planet.y * SCALE, 8, "blue");
+    ctx.fillStyle = "rgba(0, 0, 0, 0.2)"; //trail
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    for (const b of bodies) drawCircle(b.x, b.y, b.radius, b.color);
 }
 
 function loop(){
@@ -49,3 +52,6 @@ function loop(){
 }
 
 loop();
+
+drawCircle(300,300,20,"yellow"); //star
+drawCircle(450,300,8,"blue"); //planet
