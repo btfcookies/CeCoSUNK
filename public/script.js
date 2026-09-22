@@ -3,8 +3,10 @@ const ctx = canvas.getContext("2d");
 const logDisplay = document.querySelector('#log');
 const posDisplay = document.querySelector('#pos');
 const bodySettings = document.querySelector('#body-settings');
+const timeDisplay = document.querySelector('#time-display');
 
 const G = 1; //gravitational constant
+let t = 0; // start time of the simulated universe
 
 const bodies = [
     { x: 300, y: 300, vx: 0,    vy: 0,    mass: 5000, radius: 20, color: "yellow" },      // star
@@ -29,6 +31,11 @@ function addDisplaysFor(index) {
 }
 
 bodies.forEach((_, i) => addDisplaysFor(i));
+
+function updateTime(){
+    t++;
+    timeDisplay.innerHTML = "t (0.016s)= " + t;
+}
 
 function drawCircle(x, y, radius, color){
     ctx.beginPath();
@@ -103,6 +110,7 @@ function loop(){
     update();
     render();
     displayStats();
+    updateTime();
     requestAnimationFrame(loop);
 }
 
