@@ -21,5 +21,8 @@
   "homepage": "https://github.com/btfcookies/CeCoSunk#readme",
   "devDependencies": {
     "live-server": "^1.2.2"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
   }
 }
