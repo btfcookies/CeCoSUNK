@@ -1,7 +1,8 @@
 const canvas = document.querySelector('#space');
 const ctx = canvas.getContext("2d");
 const logDisplay = document.querySelector('#log');
-const posDisplay = document.querySelector('#pos')
+const posDisplay = document.querySelector('#pos');
+const bodySettings = document.querySelector('#body-settings');
 
 const G = 1; //gravitational constant
 
@@ -12,19 +13,22 @@ const bodies = [
     { x: 300, y: 480, vx: -2.6, vy: 0,    mass: 4,     radius: 5,  color: "green" },   // planet 3
 ]
 
-const velocityDisplays = bodies.map((_, i) => {
-    const div = document.createElement('div');
-    div.classList.add('velocityDisplay' + i);
-    logDisplay.append(div);
-    return div;
-});
+const velocityDisplays = [];
+const posDisplays = [];
 
-const posDisplays = bodies.map((_, i) => {
-    const div = document.createElement('div');
-    div.classList.add('posDisplay' + i);
-    posDisplay.append(div);
-    return div;
-})
+function addDisplaysFor(index) {
+    const velocityDiv = document.createElement('div');
+    velocityDiv.classList.add('velocityDisplay' + index);
+    logDisplay.append(velocityDiv);
+    velocityDisplays.push(velocityDiv);
+
+    const posDiv = document.createElement('div');
+    posDiv.classList.add('posDisplay' + index);
+    posDisplay.append(posDiv);
+    posDisplays.push(posDiv);
+}
+
+bodies.forEach((_, i) => addDisplaysFor(i));
 
 function drawCircle(x, y, radius, color){
     ctx.beginPath();
@@ -56,6 +60,13 @@ function displayStats() {
     for (let i = 0; i<bodies.length; i++){
         posDisplays[i].textContent = "Body " + i + "\n" + "pos x: " + bodies[i].x + "\n pos y : " + bodies[i].y + "\n";
     }
+}
+
+function createBody(){
+    var blankBody = {x: 350, y: 350, vx: 0, vy: 0, mass: 5, radius: 5, color: "green"};
+    bodies.push(blankBody);
+    addDisplaysFor(bodies.length - 1);
+    bodySettings.style.display = 'flex';
 }
 
 function update() {
