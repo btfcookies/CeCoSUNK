@@ -1,6 +1,7 @@
 const canvas = document.querySelector('#space');
 const ctx = canvas.getContext("2d");
 const logDisplay = document.querySelector('#log');
+const posDisplay = document.querySelector('#pos')
 
 const G = 1; //gravitational constant
 
@@ -17,6 +18,13 @@ const velocityDisplays = bodies.map((_, i) => {
     logDisplay.append(div);
     return div;
 });
+
+const posDisplays = bodies.map((_, i) => {
+    const div = document.createElement('div');
+    div.classList.add('posDisplay' + i);
+    posDisplay.append(div);
+    return div;
+})
 
 function drawCircle(x, y, radius, color){
     ctx.beginPath();
@@ -41,9 +49,12 @@ function initializeOrbits(star, planet) {
 
 for (const b of bodies.slice(1)) initializeOrbits(bodies[0], b);
 
-function displayVelocity() {
+function displayStats() {
     for (let i=0; i<bodies.length; i++){
-        velocityDisplays[i].textContent = "vx: " + bodies[i].vx + " | vy: " + bodies[i].vy;
+        velocityDisplays[i].textContent = "Body " + i + "\n" + "vx: " + bodies[i].vx + "\n vy: " + bodies[i].vy + "\n";
+    }
+    for (let i = 0; i<bodies.length; i++){
+        posDisplays[i].textContent = "Body " + i + "\n" + "pos x: " + bodies[i].x + "\n pos y : " + bodies[i].y + "\n";
     }
 }
 
@@ -80,7 +91,7 @@ function render() {
 function loop(){
     update();
     render();
-    displayVelocity();
+    displayStats();
     requestAnimationFrame(loop);
 }
 
