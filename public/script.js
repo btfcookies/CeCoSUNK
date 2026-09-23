@@ -101,7 +101,7 @@ function update() {
 }
 
 function render() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.2)"; //trail
+    ctx.fillStyle = "rgba(0, 0, 0, 0.3)"; //trail
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     for (const b of bodies) drawCircle(b.x, b.y, b.radius, b.color);
 }
