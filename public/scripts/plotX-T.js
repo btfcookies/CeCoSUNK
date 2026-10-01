@@ -26,5 +26,19 @@
             }
         }
     })
+
+    window.setChartData = function (labels, data) {
+        chart.data.labels = labels;
+        chat.data.datasets[0].data = data;
+        chart.update();
+    }
+
+    window.addPoint = function (label, value) {
+        chart.labels.push(label);
+        chart.data.datasets[0].data.push(value);
+        chart.update();
+    }
 })()
+
+
 
