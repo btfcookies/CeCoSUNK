@@ -15,7 +15,7 @@ let t = 0; // start time of the simulated universe
 
 let zoom = 1;
 const MIN_ZOOM = 0.2;
-const MAX_ZOOM = 10;
+const MAX_ZOOM = 200;
 const ZOOM_STEP = 1.2;
 
 canvas.addEventListener('wheel', (e) => {
@@ -100,9 +100,19 @@ function openVT(){
     window.open('v-t.html', 'vtGraph', 'width=900,height=600');
 }
 
+function openXT(){
+    window.open('x-t.html', 'xtGraph', 'width=900,height=600');
+}
+
 function updateVT(){
     for (let i=0; i<bodies.length; i++){
         addPoint(t, bodies[i].vx, i, bodies[i].color);
+    }
+}
+
+function updateXT(){
+    for (let i=0; i<bodies.length; i++){
+        addXPoint(t, bodies[i].x, i, bodies[i].color);
     }
 }
 
@@ -173,3 +183,4 @@ function loop(){
 
 loop();
 setInterval(updateVT, 500);
+setInterval(updateXT, 500);
