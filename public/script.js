@@ -96,6 +96,16 @@ function displayStats() {
     }
 }
 
+function openVT(){
+    window.open('v-t.html', 'vtGraph', 'width=900,height=600');
+}
+
+function updateVT(){
+    for (let i=0; i<bodies.length; i++){
+        addPoint(t, bodies[i].vx, i, bodies[i].color);
+    }
+}
+
 function displaySettings(){
     bodySettings.style.display = 'flex';
 }
@@ -162,3 +172,4 @@ function loop(){
 }
 
 loop();
+setInterval(updateVT, 500);
