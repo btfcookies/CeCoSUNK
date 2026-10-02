@@ -1,7 +1,8 @@
 (function () {
-    const canvas = document.querySelector('canvas')
+    const canvas = document.getElementById('x-t')
+    if (!canvas || typeof Chart === 'undefined') return
 
-    new Chart(canvas, {
+    const chart = new Chart(canvas, {
         type: 'line',
         data: {
             labels: [],
@@ -26,5 +27,16 @@
             }
         }
     })
-})()
 
+    window.setChartData = function (labels, data) {
+        chart.data.labels = labels;
+        chart.data.datasets[0].data = data;
+        chart.update();
+    }
+
+    window.addPoint = function (label, value) {
+        chart.data.labels.push(label);
+        chart.data.datasets[0].data.push(value);
+        chart.update();
+    }
+})()
