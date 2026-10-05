@@ -18,7 +18,9 @@ let zoom = 1;
 const MIN_ZOOM = 0.2;
 const MAX_ZOOM = 200;
 const ZOOM_STEP = 1.2;
-const refreshRate = checkRefreshRate();
+
+let refreshRate = 60; // fallback before measured
+checkRefreshRate().then(hz => {refreshRate = hz;});
 
 canvas.addEventListener('wheel', (e) => {
     e.preventDefault();
@@ -64,7 +66,7 @@ bodies.forEach((_, i) => addDisplaysFor(i));
 function updateTime(){
     t++;
     const seconds = t / refreshRate;
-    timeDisplay.innerHTML = "t = " + t + " (" + seconds.toFixed(2) + " s)";
+    timeDisplay.innerHTML = "t = " + seconds.toFixed(2) + " s";
 }
 
 function drawCircle(x, y, radius, color){
