@@ -14,6 +14,7 @@ const colorInput = document.querySelector('#color-input');
 const G = 1; // gravitational constant
 let t = 0; // start time of the simulated universe
 const dt = 1; ; // step for velociy verlet
+const EPS = 5; // softening length for plummer softening
 
 let zoom = 1;
 const MIN_ZOOM = 0.2;
@@ -150,10 +151,11 @@ function computeAcceleration(){
             if (i === j) continue;
             const dx = bodies[j].x - bodies[i].x;
             const dy = bodies[j].y - bodies[i].y;
-            const dist = Math.hypot(dx, dy) || 1; // replace || 1 with calculation later
-            const a = G * bodies[j].mass / (dist ** 2);
-            acc[i].ax += a * dx/dist;
-            acc[i].ay += a * dy/dist;
+            const distSq = dx ** 2 + dy ** 2 + EPS ** 2;
+            const invDist3 = 1 / (distSq * Math.sqrt(distSq));
+            const a = G * bodies[j].mass * invDist3;
+            acc[i].ax += a * dx;
+            acc[i].ay += a * dy;
 
         }
     }
