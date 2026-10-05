@@ -10,6 +10,7 @@ const yPosInput = document.querySelector('#ypos-input');
 const radiusInput = document.querySelector('#radius-input');
 const colorInput = document.querySelector('#color-input');
 
+
 const G = 1; //gravitational constant
 let t = 0; // start time of the simulated universe
 
@@ -17,6 +18,7 @@ let zoom = 1;
 const MIN_ZOOM = 0.2;
 const MAX_ZOOM = 200;
 const ZOOM_STEP = 1.2;
+const refreshRate = checkRefreshRate();
 
 canvas.addEventListener('wheel', (e) => {
     e.preventDefault();
@@ -61,7 +63,8 @@ bodies.forEach((_, i) => addDisplaysFor(i));
 
 function updateTime(){
     t++;
-    timeDisplay.innerHTML = "t = " + t;
+    const seconds = t / refreshRate;
+    timeDisplay.innerHTML = "t = " + t + " (" + seconds.toFixed(2) + " s)";
 }
 
 function drawCircle(x, y, radius, color){

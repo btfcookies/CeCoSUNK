@@ -7,8 +7,8 @@ function checkRefreshRate(){
         const elapsedTime = currentTime - startTime;
 
         if (elapsedTime >= 1000){
-            const estimatedHz = Math.round((frameCount * 1000) / elapsedTime);
-            
+            const estimatedHz = Math.round((frames * 1000) / elapsedTime);
+            return estimatedHz;
         }
         requestAnimationFrame(checkFrame);
     }
