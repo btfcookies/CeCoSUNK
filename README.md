@@ -8,6 +8,9 @@ CeCoSUNK uses
 - Bootstrap icons for various icons
 - Chart.js to plot v-t and x-t graphs
 
+## Data
+CeCoSUNK uses SI units for all measurements unless specifically stated. 
+
 ## Contributing
 Please see [CONTRIBUTING.md](/CONTRIBUTING.md) for details about contributing to CeCoSUNK
 

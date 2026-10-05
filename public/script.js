@@ -10,19 +10,23 @@ const yPosInput = document.querySelector('#ypos-input');
 const radiusInput = document.querySelector('#radius-input');
 const colorInput = document.querySelector('#color-input');
 
+const G = 6.674e-11; // gravitational constant (m^3/kg*s^2)
+const C = 299792458; // speed of light (m/s)
+const AU = 1.495978707e11; // m
+const M_SUN = 1.989e30; // mass of the sun (kg)
+const DAY = 86400; // s
+const YEAR = 365.25 * DAY; // s
+const EPS = 1e7; // softening length for plummer softening (m)
 
-const G = 1; // gravitational constant
-let t = 0; // start time of the simulated universe
-const dt = 1; ; // step for velociy verlet
-const EPS = 5; // softening length for plummer softening
+let t = 0; // elapsed simulated time (s)
+let metersPerPixel = 1e9; // 1 AU = ~150 px
+let dt = DAY; // simulated seconds per physics step used in velocity verlet
+let stepsPerFrame = 1; // time warp
 
 let zoom = 1;
 const MIN_ZOOM = 0.2;
 const MAX_ZOOM = 200;
 const ZOOM_STEP = 1.2;
-
-let refreshRate = 60; // fallback before measured
-checkRefreshRate().then(hz => {refreshRate = hz;});
 
 canvas.addEventListener('wheel', (e) => {
     e.preventDefault();
@@ -42,10 +46,9 @@ function zoomOut(){
 }
 
 const bodies = [
-    { x: 300, y: 300, vx: 0,    vy: 0,    mass: 5000, radius: 20, color: "yellow" },      // star
-    { x: 450, y: 300, vx: 0,    vy: 2.4,  mass: 5,     radius: 6,  color: "blue" },  // planet 1
-    { x: 200, y: 300, vx: 0,    vy: -3.2, mass: 3,     radius: 4,  color: "red" },   // planet 2
-    { x: 300, y: 480, vx: -2.6, vy: 0,    mass: 4,     radius: 5,  color: "green" },   // planet 3
+    { x: 0, y: 0, vx: 0, vy: 0, mass: M_SUN, drawRadius: 10, color: "yellow" }, // Sun
+    { x: AU, y: 0, vx: 0, vy: 0, mass: 5.972e24, drawRadius: 4, color: "blue" },  // Earth
+
 ]
 
 const velocityDisplays = [];
@@ -66,9 +69,9 @@ function addDisplaysFor(index) {
 bodies.forEach((_, i) => addDisplaysFor(i));
 
 function updateTime(){
-    t++;
-    const seconds = t / refreshRate;
-    timeDisplay.innerHTML = "t = " + seconds.toFixed(2) + " s";
+    const days = t / DAY;
+    const years = t / YEAR;
+    timeDisplay.textContent = "t = " + days.toFixed(1) + " days (" + years.toFixed(2) + " yr)";
 }
 
 function drawCircle(x, y, radius, color){
@@ -113,13 +116,13 @@ function openXT(){
 
 function updateVT(){
     for (let i=0; i<bodies.length; i++){
-        addPoint(t, bodies[i].vx, i, bodies[i].color);
+        addPoint(t / DAY, bodies[i].vx, i, bodies[i].color);
     }
 }
 
 function updateXT(){
     for (let i=0; i<bodies.length; i++){
-        addXPoint(t, bodies[i].x, i, bodies[i].color);
+        addXPoint(t / DAY, bodies[i].x, i, bodies[i].color);
     }
 }
 
@@ -128,6 +131,7 @@ function displaySettings(){
 }
 
 function createBody(){
+    // inputs are in friendly units: mass in solar masses, position in AU, radius in pixels
     let inputtedMass = parseFloat(massInput.value);
     let xpos = parseFloat(xPosInput.value);
     let ypos = parseFloat(yPosInput.value);
@@ -138,8 +142,13 @@ function createBody(){
         alert("Mass, X pos, Y pos, and Radius must all be numbers.");
         return;
     }
+    if (inputtedMass <= 0 || inputtedRadius <= 0) {
+        alert("Mass and Radius must be greater than zero.");
+        return;
+    }
 
-    let newBody = {x: xpos, y: ypos, vx: 0, vy: 0, mass: inputtedMass, radius: inputtedRadius, color: inputtedColor};
+    // convert to SI for the physics
+    let newBody = {x: xpos * AU, y: ypos * AU, vx: 0, vy: 0, mass: inputtedMass * M_SUN, drawRadius: inputtedRadius, color: inputtedColor};
     bodies.push(newBody);
     addDisplaysFor(bodies.length - 1);
 }
@@ -186,12 +195,26 @@ function render() {
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.scale(zoom, zoom);
     ctx.translate(-canvas.width / 2, -canvas.height / 2);
-    for (const b of bodies) drawCircle(b.x, b.y, b.radius, b.color);
+    for (const b of bodies) {
+        const p = worldToScreen(b);
+        drawCircle(p.x, p.y, b.drawRadius, b.color);
+    }
     ctx.restore();
 }
 
+// physics lives in meters; the canvas is only a view of it, centered on the origin
+function worldToScreen(b) {
+    return {
+        x: canvas.width / 2 + b.x / metersPerPixel,
+        y: canvas.height / 2 + b.y / metersPerPixel,
+    };
+}
+
 function loop(){
-    update();
+    for (let s = 0; s < stepsPerFrame; s++) {
+        update();
+        t += dt;
+    }
     render();
     displayStats();
     updateTime();

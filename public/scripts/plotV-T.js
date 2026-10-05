@@ -26,10 +26,10 @@
             scales: {
                 x: {
                     type: 'linear',
-                    title: { display: true, text: 'Time (t)' }
+                    title: { display: true, text: 'Time (days)' }
                 },
                 y: {
-                    title: { display: true, text: 'Velocity (vx)' }
+                    title: { display: true, text: 'Velocity vx (m/s)' }
                 }
             }
         }
