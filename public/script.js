@@ -11,8 +11,9 @@ const radiusInput = document.querySelector('#radius-input');
 const colorInput = document.querySelector('#color-input');
 
 
-const G = 1; //gravitational constant
+const G = 1; // gravitational constant
 let t = 0; // start time of the simulated universe
+const dt = 1; ; // step for velociy verlet
 
 let zoom = 1;
 const MIN_ZOOM = 0.2;
@@ -142,27 +143,36 @@ function createBody(){
     addDisplaysFor(bodies.length - 1);
 }
 
-function update() {
-    for (let i = 0; i<bodies.length; i++){
-        let ax = 0, ay = 0;
-        for (let j = 0; j < bodies.length; j++){
-            if (i===j) continue;
+function computeAcceleration(){
+    const acc = bodies.map(() => ({ax: 0, ay: 0}));
+    for (let i = 0; i<bodies.length; i++) {
+        for (let j = 0; j<bodies.length; j++){
+            if (i === j) continue;
             const dx = bodies[j].x - bodies[i].x;
             const dy = bodies[j].y - bodies[i].y;
-            const distance = Math.sqrt(dx ** 2 + dy ** 2) || 1; //never divide by 0
-            const force = (G * bodies[i].mass * bodies[j].mass) / (distance ** 2 ); //Newton's Law of Universal Gravitation
-            ax += (force * dx) / distance / bodies[i].mass;
-            ay += (force * dy) / distance / bodies[i].mass;
+            const dist = Math.hypot(dx, dy) || 1; // replace || 1 with calculation later
+            const a = G * bodies[j].mass / (dist ** 2);
+            acc[i].ax += a * dx/dist;
+            acc[i].ay += a * dy/dist;
+
         }
-
-        bodies[i].vx += ax;
-        bodies[i].vy += ay;
     }
+    return acc;
+}
 
-    for (const b of bodies){
-        b.x += b.vx;
-        b.y += b.vy;
-    }
+function update() {
+    let acc = computeAcceleration();
+    bodies.forEach((b, i) => {
+        b.vx += 0.5 * acc[i].ax * dt;
+        b.vy += 0.5 * acc[i].ay * dt;
+        b.x += b.vx * dt;
+        b.y += b.vy * dt;
+    });
+    acc = computeAcceleration();
+    bodies.forEach((b, i) => {
+        b.vx += 0.5 * acc[i].ax * dt;
+        b.vy += 0.5 * acc[i].ay * dt;
+    });
 
 }
 
