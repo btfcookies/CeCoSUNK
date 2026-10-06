@@ -12,6 +12,7 @@
     <div id="canvas-row">
         <div id="side-panel">
             <button id="new-body-btn" onclick="displaySettings()">New Body</button>
+            <button id="new-black-hole-btn" onclick="displayBlackHoleSettings()">New Black Hole (beta)</button>
             <button id="open-vt-btn" onclick="openVT()">Open v-t Graph</button>
             <button id="open-xt-btn" onclick="openXT()">Open x-t Graph</button>
             <div id="body-settings">
@@ -31,6 +32,16 @@
                 <option value="Yellow">Yellow</option>
                 </select>
                 <button onclick="createBody()">Submit</button>
+            </div>
+            <div id="black-hole-settings">
+                <label for="bh-mass-input">Mass (solar masses): </label>
+                <input type="text" id="bh-mass-input">
+                <label for="bh-xpos-input">X pos (AU): </label>
+                <input type="text" id="bh-xpos-input" placeholder="0">
+                <label for="bh-ypos-input">Y pos (AU): </label>
+                <input type="text" id="bh-ypos-input" placeholder="0">
+                <div id="bh-info">Event horizon: <span id="bh-horizon-readout">-</span></div>
+                <button onclick="createBlackHole()">Submit</button>
             </div>
         </div>
         <div id="canvas-col">

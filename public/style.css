@@ -1,23 +1,10 @@
 body {background: white; margin: 0; overflow: hidden; display: flex; flex-direction: column; height: 100vh;}
 #canvas-row {display: flex; flex-shrink: 0; justify-content: flex-start; align-items: flex-start; margin-top: 40px;}
-#side-panel {width: 300px; height: 600px; margin-right: 20px; border: 1px solid #d0d0d0; box-sizing: border-box;}
+#side-panel {width: 300px; height: 600px; margin-right: 20px; border: 1px solid #d0d0d0; box-sizing: border-box; overflow-y: auto;}
 
 #new-body-btn,
-#open-vt-btn {
-    display: block;
-    width: calc(100% - 30px);
-    box-sizing: border-box;
-    margin: 15px;
-    padding: 8px;
-    background: #fff;
-    color: #111;
-    border: 1px solid #bbb;
-    border-radius: 3px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI';
-    font-size: 14px;
-    cursor: pointer;
-}
-
+#new-black-hole-btn,
+#open-vt-btn,
 #open-xt-btn {
     display: block;
     width: calc(100% - 30px);
@@ -34,9 +21,15 @@ body {background: white; margin: 0; overflow: hidden; display: flex; flex-direct
 }
 
 #new-body-btn:hover,
-#open-vt-btn:hover {
+#new-black-hole-btn:hover,
+#open-vt-btn:hover,
+#open-xt-btn:hover {
     background: #f0f0f0;
     color: #111;
+}
+
+#new-black-hole-btn {
+    border-color: #e8890c;
 }
 #canvas-col {display: flex; flex-direction: column; flex-shrink: 0;}
 #time-display {color: #111; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI'; margin-bottom: 5px;}
@@ -77,7 +70,8 @@ canvas {display: block; flex-shrink: 0; background:black; border: 1px solid #d0d
 #panel {flex: 1; min-height: 0; display: flex; flex-direction: row; border: 1px solid #d0d0d0; color: #111; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI';}
 #log {flex: 1; min-width: 0; overflow-y: auto; white-space: pre-line;}
 #pos {flex: 1; min-width: 0; overflow-y: auto; white-space: pre-line; border-left: 1px solid #d0d0d0;}
-#body-settings {
+#body-settings,
+#black-hole-settings {
     display: none;
     flex-direction: column;
     gap: 10px;
@@ -87,12 +81,18 @@ canvas {display: block; flex-shrink: 0; background:black; border: 1px solid #d0d
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI';
 }
 
-#body-settings label {
+#body-settings label,
+#black-hole-settings label {
+    font-size: 13px;
+}
+
+#bh-info {
     font-size: 13px;
 }
 
 #body-settings input,
-#body-settings select {
+#body-settings select,
+#black-hole-settings input {
     width: 100%;
     box-sizing: border-box;
     padding: 6px 8px;
@@ -104,7 +104,8 @@ canvas {display: block; flex-shrink: 0; background:black; border: 1px solid #d0d
     font-size: 14px;
 }
 
-#body-settings button {
+#body-settings button,
+#black-hole-settings button {
     margin-top: 6px;
     padding: 8px;
     background: #111;
