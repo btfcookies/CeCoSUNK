@@ -26,7 +26,7 @@ in the side panel, fill in the required fields, and click **Submit**.
 
 The event horizon is calculated using the Schwarzschild radius:
 
-`r = 2GM / c²`
+![image](https://www.perthobservatory.com.au/wp-content/uploads/schwarzschild-radius-mathematical-equation-600x422.jpg)
 
 The calculated radius is displayed in AU, km, or m depending on its size.
 
