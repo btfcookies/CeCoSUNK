@@ -66,6 +66,31 @@ body {margin: 0px;}
     background-color: #2d3748;
 }
 
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.nav-github {
+    color: #4a5568;
+    font-size: 22px;
+    line-height: 1;
+    transition: color 0.15s ease;
+}
+
+.nav-github:hover {
+    color: #1a202c;
+}
+
+[data-theme="dark"] .nav-github {
+    color: #a0aec0;
+}
+
+[data-theme="dark"] .nav-github:hover {
+    color: #f6f7fa;
+}
+
 .hero {
     height: 1000px;
     background-color: #f0f4f8;

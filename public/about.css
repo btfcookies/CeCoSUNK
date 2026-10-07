@@ -1,1 +1,12 @@
 body {margin-left: 10px;}
+
+.disclaimer {
+    position: fixed;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    margin: 0;
+    text-align: center;
+    font-size: 11px;
+    color: #888;
+}
